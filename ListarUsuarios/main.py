@@ -16,23 +16,40 @@ mycursor.execute("SELECT nome,email FROM usuarios")
 
 
 
-def Iniciar(mycursor=mycursor):
+class Users:
+  def __init__(self):
+    self.mydb = mysql.connector.connect(
+      host="localhost",
+      user="root",
+      password="",
+      database='pythonusers'
+    )
+  def BuscarUsers(self):
+    self.mycursor = self.mydb.cursor()
+    self.mycursor.execute("SELECT nome,email FROM usuarios")
+
+  def Iniciar():
     layout = [
-        [sg.Text('Usuários')],
-        [sg.Text('Nome: ',size=(10,0)), sg.Output(size=(15,1), key='-OUTPUT1-')],
-        [sg.Text('Email: ',size=(10,0)), sg.Output(size=(15,1), key='-OUTPUT2-')],
-        [sg.Button('Mostrar'),sg.Exit()]
+      [sg.Text('Nomes: ')],
+      [sg.Output()],
+      [sg.Button('Mostrar nomes'),sg.Button('Sair')]
     ]
+    self.tela = sg.Window('Nomes',layout=layout)
 
-    janela = sg.Window('Usuários',layout=layout)
-    eventos, valores = janela.Read()
     while True:
-        if eventos == "Mostrar":            
-            janela['-OUTPUT1-'].update('oi')
-            continue
-        elif eventos == "Exit" or eventos == janela.WIN_CLOSED:
-            break
-    janela.close()
+      self.LerOsValoresDaTela()
+      try:
+        if self.eventos == 'Mostrar nomes':
+          self.BuscarUsers()
+          for nomes in names:
+            print(nomes)
+        elif eventos == 'Sair' or eventos == WIN_CLOSED:
+            self.tela.Close()
+      except:
+        print('Erro')
 
-Iniciar(mycursor)
+    def LerOsValoresDaTela(self):
+      self.eventos, self.valores = self.tela.Read()
+Iniciar()
+
 
